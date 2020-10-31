@@ -1,1 +1,7 @@
-*.meta
+.vscode/**
+Assembly-CSharp.csproj
+Library/**
+Logs/**
+Packages/**
+UnityMediaRecorder.sln
+obj/**
