@@ -5,12 +5,12 @@ using UnityMediaRecorder.Utils;
 
 namespace UnityMediaRecorder.Examples {
 
-  public class RecorderExampleBehaviour : MonoBehaviour {
+  public class Example : MonoBehaviour {
 
-    private CameraRecorderBehaviour recorder_;
+    private RecorderBehaviour recorder_;
 
     private void Awake() {
-      recorder_ = this.GetOrAddComponent<CameraRecorderBehaviour>();
+      recorder_ = this.GetOrAddComponent<RecorderBehaviour>();
     }
 
     // this example will move and tilt back and forth along the X axis

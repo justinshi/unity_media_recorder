@@ -17,7 +17,7 @@ namespace UnityMediaRecorder {
     
   }
 
-  public class CameraRecorderBehaviour : MonoBehaviour {
+  public class RecorderBehaviour : MonoBehaviour {
     
     private class VideoData {
 
