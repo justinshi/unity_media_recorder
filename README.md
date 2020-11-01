@@ -8,7 +8,7 @@ Provides functionality for recording audio and video in-game in Unity.
 - To start a recording, call `StartRecording`, using an instance of `RecordingOptions` to specify parameters (video frame rate, audio bit rate, etc.)
 - Call `StopRecording` to complete the recording and finish saving it to a file in your "My Videos" directory
 
-See `RecorderExampleBehaviour.cs` and `RecorderExampleScene.unity` for an example.
+See `Example.cs` and `Example.unity` for an example.
 
 ## Dependencies
 - Uses FFmpeg for audio/video processing and encoding (http://ffmpeg.org/)
