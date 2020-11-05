@@ -58,7 +58,7 @@ namespace UnityMediaRecorder {
       this.sampleRate = sampleRate;
       this.bitRate = bitRate;
       this.filterGraphDesc = filterGraphDesc;
-      this.channelLayout = UNITY_SPEAKER_MODE_TO_FFMPEG_CHANNEL_LAYOUT_[speakerMode];
+      channelLayout = UNITY_SPEAKER_MODE_TO_FFMPEG_CHANNEL_LAYOUT_[speakerMode];
     }
 
   }

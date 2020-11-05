@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 using FFmpeg.AutoGen;
 
@@ -10,7 +9,7 @@ namespace UnityMediaRecorder.FFmpegLibraryWrappers {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
       "avfilter-7.dll";
 #else
-      String.Empty;
+      "PLATFORM_NOT_SUPPORTED";
 #endif
 
 #pragma warning disable IDE1006

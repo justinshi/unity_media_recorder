@@ -10,7 +10,7 @@ namespace UnityMediaRecorder.FFmpegLibraryWrappers {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
       "avutil-56.dll";
 #else
-      String.Empty;
+      "PLATFORM_NOT_SUPPORTED";
 #endif
 
     public const int AV_OPT_SEARCH_CHILDREN = 1 << 0;

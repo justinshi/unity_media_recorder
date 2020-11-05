@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 using FFmpeg.AutoGen;
 
@@ -10,7 +9,7 @@ namespace UnityMediaRecorder.FFmpegLibraryWrappers {
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
       "avformat-58.dll";
 #else
-      String.Empty;
+      "PLATFORM_NOT_SUPPORTED";
 #endif
 
     public const int AVFMT_GLOBALHEADER = 0x0040;
