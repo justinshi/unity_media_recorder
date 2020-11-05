@@ -1,6 +1,6 @@
-﻿using FFmpeg.AutoGen;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityMediaRecorder.FFmpegLibraryWrappers;
 
 namespace UnityMediaRecorder {
 
@@ -40,13 +40,13 @@ namespace UnityMediaRecorder {
 
     private static readonly Dictionary<AudioSpeakerMode, int> UNITY_SPEAKER_MODE_TO_FFMPEG_CHANNEL_LAYOUT_ =
       new Dictionary<AudioSpeakerMode, int> {
-        { AudioSpeakerMode.Mono, ffmpeg.AV_CH_LAYOUT_MONO },
-        { AudioSpeakerMode.Stereo, ffmpeg.AV_CH_LAYOUT_STEREO },
-        { AudioSpeakerMode.Quad, ffmpeg.AV_CH_LAYOUT_QUAD },
-        { AudioSpeakerMode.Surround, ffmpeg.AV_CH_LAYOUT_SURROUND },
-        { AudioSpeakerMode.Mode5point1, ffmpeg.AV_CH_LAYOUT_5POINT1 },
-        { AudioSpeakerMode.Mode7point1, ffmpeg.AV_CH_LAYOUT_7POINT1 },
-        { AudioSpeakerMode.Prologic, ffmpeg.AV_CH_LAYOUT_STEREO } // TODO: check if this is okay
+        { AudioSpeakerMode.Mono, LibavutilWrapper.AV_CH_LAYOUT_MONO },
+        { AudioSpeakerMode.Stereo, LibavutilWrapper.AV_CH_LAYOUT_STEREO },
+        { AudioSpeakerMode.Quad, LibavutilWrapper.AV_CH_LAYOUT_QUAD },
+        { AudioSpeakerMode.Surround, LibavutilWrapper.AV_CH_LAYOUT_SURROUND },
+        { AudioSpeakerMode.Mode5point1, LibavutilWrapper.AV_CH_LAYOUT_5POINT1 },
+        { AudioSpeakerMode.Mode7point1, LibavutilWrapper.AV_CH_LAYOUT_7POINT1 },
+        { AudioSpeakerMode.Prologic, LibavutilWrapper.AV_CH_LAYOUT_STEREO } // TODO: check if this is okay
       };
 
     public readonly int sampleRate;

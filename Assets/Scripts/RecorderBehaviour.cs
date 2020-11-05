@@ -152,9 +152,8 @@ namespace UnityMediaRecorder {
         aTask_ = Task.CompletedTask;
       }
 
-      string appDataPath = Application.dataPath;
       await Task.Run(() => {
-        rec_ = new Recording(options, appDataPath);
+        rec_ = new Recording(options);
       });
       state_ = RecorderState.RECORDING;
       return true;

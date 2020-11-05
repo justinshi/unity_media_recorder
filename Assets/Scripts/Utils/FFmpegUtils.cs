@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using UnityMediaRecorder.FFmpegLibraryWrappers;
 
 namespace UnityMediaRecorder.Utils {
 
@@ -104,7 +105,7 @@ namespace UnityMediaRecorder.Utils {
 
     public static unsafe ulong GetChannelLayout(AVCodec* encoder, int channelLayout) {
       if (encoder->channel_layouts == null) {
-        return ffmpeg.AV_CH_LAYOUT_STEREO;
+        return LibavutilWrapper.AV_CH_LAYOUT_STEREO;
       }
 
       ulong targetChannelLayout = (ulong) channelLayout;
@@ -114,7 +115,7 @@ namespace UnityMediaRecorder.Utils {
         }
       }
 
-      return ffmpeg.AV_CH_LAYOUT_STEREO;
+      return LibavutilWrapper.AV_CH_LAYOUT_STEREO;
     }
 
     public static unsafe void DebugLogVideoEncoderInfo(AVCodec* encoder) {

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.IO;
 using FFmpeg.AutoGen;
 using UnityMediaRecorder.Utils;
+using UnityMediaRecorder.FFmpegLibraryWrappers;
 
 namespace UnityMediaRecorder {
 
@@ -18,11 +18,7 @@ namespace UnityMediaRecorder {
     public bool IsVideoEnabled => options.vParams != null;
     public bool IsAudioEnabled => options.aParams != null;
 
-    public Recording(RecordingOptions options, string dataPath) {
-      if (ffmpeg.RootPath == String.Empty) {
-        ffmpeg.RootPath = Path.Combine(dataPath, "Plugins", "ffmpeg"); // TODO: fix FFmpeg library root path
-      }
-
+    public Recording(RecordingOptions options) {
       this.options = options;
 
       string filename = options.name + FFmpegUtils.GetFilenameExtension(IsVideoEnabled, IsAudioEnabled);
@@ -30,14 +26,14 @@ namespace UnityMediaRecorder {
       int ret;
 
       fixed (AVFormatContext** ptr = &outCtx_) {
-        ret = ffmpeg.avformat_alloc_output_context2(ptr, null, null, filename);
+        ret = LibavformatWrapper.avformat_alloc_output_context2(ptr, null, null, filename);
       }
       FFmpegUtils.CheckRet(ret, "Failed to allocate output context");
 
       AVOutputFormat* outFmt = outCtx_->oformat;
 
-      if (!FFmpegUtils.CheckFlag(outFmt->flags, ffmpeg.AVFMT_NOFILE)) {
-        ret = ffmpeg.avio_open(&outCtx_->pb, filename, ffmpeg.AVIO_FLAG_WRITE);
+      if (!FFmpegUtils.CheckFlag(outFmt->flags, LibavformatWrapper.AVFMT_NOFILE)) {
+        ret = LibavformatWrapper.avio_open(&outCtx_->pb, filename, LibavformatWrapper.AVIO_FLAG_WRITE);
         FFmpegUtils.CheckRet(ret, "Failed to open file");
       }
 
@@ -49,7 +45,7 @@ namespace UnityMediaRecorder {
         aHandler_ = new FFmpegMediaHandler(outFmt->audio_codec, outCtx_, options.aParams);
       }
 
-      ret = ffmpeg.avformat_write_header(outCtx_, null);
+      ret = LibavformatWrapper.avformat_write_header(outCtx_, null);
       FFmpegUtils.CheckRet(ret, "Failed to write stream header");
     }
 
@@ -59,13 +55,13 @@ namespace UnityMediaRecorder {
       }
 
       // Assuming that texture data from Unity will be RGBA - 1 byte per channel
-      SwsContext* swsCtx = ffmpeg.sws_getContext(
+      SwsContext* swsCtx = LibswscaleWrapper.sws_getContext(
         width,
         height,
         AVPixelFormat.AV_PIX_FMT_RGBA,
         options.vParams.width,
         options.vParams.height,
-        (AVPixelFormat) vHandler_.fr->format,
+        (AVPixelFormat)vHandler_.fr->format,
         0,
         null,
         null,
@@ -79,10 +75,10 @@ namespace UnityMediaRecorder {
 
       int[] linesize = { 4 * width };
 
-      int ret = ffmpeg.av_frame_make_writable(vHandler_.fr);
+      int ret = LibavutilWrapper.av_frame_make_writable(vHandler_.fr);
       FFmpegUtils.CheckRet(ret, "Failed to make video frame writable");
 
-      ffmpeg.sws_scale(
+      LibswscaleWrapper.sws_scale(
         swsCtx,
         dataPlanes,
         linesize,
@@ -91,7 +87,7 @@ namespace UnityMediaRecorder {
         vHandler_.fr->data,
         vHandler_.fr->linesize);
 
-      ffmpeg.sws_freeContext(swsCtx);
+      LibswscaleWrapper.sws_freeContext(swsCtx);
 
       vHandler_.fr->pts = timestamp;
       vHandler_.WriteFrame();
@@ -102,21 +98,21 @@ namespace UnityMediaRecorder {
         throw new InvalidOperationException("Audio recording disabled");
       }
 
-      SwrContext* swrCtx = ffmpeg.swr_alloc();
+      SwrContext* swrCtx = LibswresampleWrapper.swr_alloc();
       FFmpegUtils.CheckRet(swrCtx, "Failed to allocate resampling context");
 
       // Assume that audio data from Unity will be interleaved floats
-      ffmpeg.av_opt_set_sample_fmt(swrCtx, "in_sample_fmt", AVSampleFormat.AV_SAMPLE_FMT_FLT, 0);
-      ffmpeg.av_opt_set_int(swrCtx, "in_channel_count", channels, 0);
-      ffmpeg.av_opt_set_int(swrCtx, "in_sample_rate", sampleRate, 0);
-      ffmpeg.av_opt_set_sample_fmt(swrCtx, "out_sample_fmt", aHandler_.encCtx->sample_fmt, 0);
-      ffmpeg.av_opt_set_int(swrCtx, "out_channel_count", aHandler_.encCtx->channels, 0);
-      ffmpeg.av_opt_set_int(swrCtx, "out_sample_rate", aHandler_.encCtx->sample_rate, 0);
+      LibavutilWrapper.av_opt_set_sample_fmt(swrCtx, "in_sample_fmt", AVSampleFormat.AV_SAMPLE_FMT_FLT, 0);
+      LibavutilWrapper.av_opt_set_int(swrCtx, "in_channel_count", channels, 0);
+      LibavutilWrapper.av_opt_set_int(swrCtx, "in_sample_rate", sampleRate, 0);
+      LibavutilWrapper.av_opt_set_sample_fmt(swrCtx, "out_sample_fmt", aHandler_.encCtx->sample_fmt, 0);
+      LibavutilWrapper.av_opt_set_int(swrCtx, "out_channel_count", aHandler_.encCtx->channels, 0);
+      LibavutilWrapper.av_opt_set_int(swrCtx, "out_sample_rate", aHandler_.encCtx->sample_rate, 0);
 
-      int ret = ffmpeg.swr_init(swrCtx);
+      int ret = LibswresampleWrapper.swr_init(swrCtx);
       FFmpegUtils.CheckRet(ret, "Failed to initialize resampling context");
 
-      ret = ffmpeg.av_frame_make_writable(aHandler_.fr);
+      ret = LibavutilWrapper.av_frame_make_writable(aHandler_.fr);
       FFmpegUtils.CheckRet(ret, "Failed to make audio frame writable");
 
       int samplesPerChannel = data.Length / channels;
@@ -124,7 +120,7 @@ namespace UnityMediaRecorder {
       fixed (byte** frameDataDblPtr = frameDataPtrArray) {
         fixed (float* dataPtr = data) {
           byte** dataDblPtr = (byte**) &dataPtr;
-          ret = ffmpeg.swr_convert(
+          ret = LibswresampleWrapper.swr_convert(
             swrCtx,
             frameDataDblPtr,
             samplesPerChannel,
@@ -134,7 +130,7 @@ namespace UnityMediaRecorder {
       }
       FFmpegUtils.CheckRet(ret, "Failed to resample audio data");
 
-      ffmpeg.swr_free(&swrCtx);
+      LibswresampleWrapper.swr_free(&swrCtx);
 
       aHandler_.fr->pts = aHandler_.nextPts;
       aHandler_.nextPts += samplesPerChannel;
@@ -142,17 +138,17 @@ namespace UnityMediaRecorder {
     }
 
     public void CleanUp() {
-      int ret = ffmpeg.av_write_trailer(outCtx_);
+      int ret = LibavformatWrapper.av_write_trailer(outCtx_);
       FFmpegUtils.CheckRet(ret, "Failed to write stream trailer");
 
-      if (!FFmpegUtils.CheckFlag(outCtx_->oformat->flags, ffmpeg.AVFMT_NOFILE)) {
-        ret = ffmpeg.avio_closep(&outCtx_->pb);
+      if (!FFmpegUtils.CheckFlag(outCtx_->oformat->flags, LibavformatWrapper.AVFMT_NOFILE)) {
+        ret = LibavformatWrapper.avio_closep(&outCtx_->pb);
         FFmpegUtils.CheckRet(ret, "Failed to close file");
       }
 
       vHandler_?.CleanUp();
       aHandler_?.CleanUp();
-      ffmpeg.avformat_free_context(outCtx_);
+      LibavformatWrapper.avformat_free_context(outCtx_);
     }
 
     public bool CanEncodeAudioFrame() {
@@ -164,7 +160,7 @@ namespace UnityMediaRecorder {
         return true;
       }
 
-      return ffmpeg.av_compare_ts(
+      return LibavutilWrapper.av_compare_ts(
         aHandler_.nextPts,
         aHandler_.encCtx->time_base,
         vHandler_.nextPts,
@@ -177,7 +173,7 @@ namespace UnityMediaRecorder {
         return false;
       }
       
-      long currentTime = ffmpeg.av_gettime();
+      long currentTime = LibavutilWrapper.av_gettime();
       if (!videoStartTime_.HasValue) {
         videoStartTime_ = currentTime;
       }
