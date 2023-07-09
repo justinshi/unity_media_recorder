@@ -2,9 +2,7 @@ using System.Runtime.InteropServices;
 using FFmpeg.AutoGen;
 
 namespace UnityMediaRecorder.FFmpegLibraryWrappers {
-
   public static class LibswresampleWrapper {
-
     private const string LIBSWRESAMPLE_PLUGIN_NAME_ =
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
       "swresample-3.dll";
@@ -25,7 +23,5 @@ namespace UnityMediaRecorder.FFmpegLibraryWrappers {
     [DllImport(LIBSWRESAMPLE_PLUGIN_NAME_, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     public unsafe static extern void swr_free(SwrContext** s);
 #pragma warning restore IDE1006
-
   }
-
 }

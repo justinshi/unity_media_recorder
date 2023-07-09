@@ -2,16 +2,13 @@ using System.Runtime.InteropServices;
 using FFmpeg.AutoGen;
 
 namespace UnityMediaRecorder.FFmpegLibraryWrappers {
-
   public static class LibavcodecWrapper {
-
     private const string LIBAVCODEC_PLUGIN_NAME_ =
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
       "avcodec-58.dll";
 #else
       "PLATFORM_NOT_SUPPORTED";
 #endif
-
     public const int AV_CODEC_FLAG_GLOBAL_HEADER = 1 << 22;
 
 #pragma warning disable IDE1006
@@ -42,7 +39,5 @@ namespace UnityMediaRecorder.FFmpegLibraryWrappers {
     [DllImport(LIBAVCODEC_PLUGIN_NAME_, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     public unsafe static extern void avcodec_free_context(AVCodecContext** avctx);
 #pragma warning restore IDE1006
-
   }
-
 }

@@ -2,9 +2,7 @@ using System.Runtime.InteropServices;
 using FFmpeg.AutoGen;
 
 namespace UnityMediaRecorder.FFmpegLibraryWrappers {
-
   public static class LibavfilterWrapper {
-
     private const string LIBAVFILTER_PLUGIN_NAME_ =
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
       "avfilter-7.dll";
@@ -43,7 +41,5 @@ namespace UnityMediaRecorder.FFmpegLibraryWrappers {
     [DllImport(LIBAVFILTER_PLUGIN_NAME_, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     public unsafe static extern void avfilter_graph_free(AVFilterGraph** graph);
 #pragma warning restore IDE1006
-
   }
-
 }

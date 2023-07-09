@@ -1,9 +1,7 @@
 using UnityEngine;
 
 namespace UnityMediaRecorder.Utils {
-
   public static class UnityUtils {
-
     public static T GetOrAddComponent<T>(this MonoBehaviour mb) where T : Component {
       T component = mb.GetComponent<T>();
       if (component == null) {
@@ -11,7 +9,5 @@ namespace UnityMediaRecorder.Utils {
       }
       return component;
     }
-
   }
-
 }

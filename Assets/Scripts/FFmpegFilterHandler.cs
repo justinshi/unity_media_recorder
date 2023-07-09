@@ -5,9 +5,7 @@ using UnityMediaRecorder.Utils;
 using UnityMediaRecorder.FFmpegLibraryWrappers;
 
 namespace UnityMediaRecorder {
-
   public unsafe class FFmpegAudioFilterHandler : FFmpegFilterHandler {
-
     public static FFmpegAudioFilterHandler Factory(int sampleRate, AVSampleFormat format, ulong channelLayout, string desc, AVFrame* fr) {
       if (desc == String.Empty) {
         return null;
@@ -28,12 +26,10 @@ namespace UnityMediaRecorder {
       return new FFmpegAudioFilterHandler(args, desc, fr);
     }
 
-    private FFmpegAudioFilterHandler(string args, string desc, AVFrame* fr) : base(args, desc, fr) {}
-
+    private FFmpegAudioFilterHandler(string args, string desc, AVFrame* fr) : base(args, desc, fr) { }
   }
 
   public unsafe class FFmpegVideoFilterHandler : FFmpegFilterHandler {
-
     public static FFmpegVideoFilterHandler Factory(int width, int height, string desc, AVFrame* fr) {
       if (desc == String.Empty) {
         return null;
@@ -61,12 +57,10 @@ namespace UnityMediaRecorder {
       return videoFilterHandler;
     }
 
-    private FFmpegVideoFilterHandler(string args, string desc, AVFrame* fr) : base(args, desc, fr) {}
-
+    private FFmpegVideoFilterHandler(string args, string desc, AVFrame* fr) : base(args, desc, fr) { }
   }
 
   public abstract unsafe class FFmpegFilterHandler {
-
     protected readonly AVFilterContext* bufSinkCtx_;
     private readonly AVFilterContext* bufSrcCtx_;
     private readonly AVFilterGraph* graph_;
@@ -138,7 +132,5 @@ namespace UnityMediaRecorder {
         LibavfilterWrapper.avfilter_graph_free(ptr);
       }
     }
-
   }
-
 }

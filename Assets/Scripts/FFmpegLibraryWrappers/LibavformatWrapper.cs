@@ -2,16 +2,13 @@ using System.Runtime.InteropServices;
 using FFmpeg.AutoGen;
 
 namespace UnityMediaRecorder.FFmpegLibraryWrappers {
-
   public static class LibavformatWrapper {
-
     private const string LIBFORMAT_PLUGIN_NAME_ =
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
       "avformat-58.dll";
 #else
       "PLATFORM_NOT_SUPPORTED";
 #endif
-
     public const int AVFMT_GLOBALHEADER = 0x0040;
     public const int AVFMT_NOFILE = 0x0001;
     public const int AVIO_FLAG_WRITE = 2;
@@ -41,7 +38,5 @@ namespace UnityMediaRecorder.FFmpegLibraryWrappers {
     [DllImport(LIBFORMAT_PLUGIN_NAME_, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     public unsafe static extern void avformat_free_context(AVFormatContext* s);
 #pragma warning restore IDE1006
-
   }
-
 }

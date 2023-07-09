@@ -3,9 +3,7 @@ using UnityMediaRecorder.Utils;
 using UnityMediaRecorder.FFmpegLibraryWrappers;
 
 namespace UnityMediaRecorder {
-
   public unsafe class FFmpegMediaHandler {
-
     public long nextPts;
 
     public readonly AVFrame* fr;
@@ -152,7 +150,5 @@ namespace UnityMediaRecorder {
 
       filterHandler_?.CleanUp();
     }
-
   }
-
 }

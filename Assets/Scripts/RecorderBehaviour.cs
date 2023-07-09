@@ -6,35 +6,28 @@ using UnityEngine.Rendering;
 using UnityMediaRecorder.Utils;
 
 namespace UnityMediaRecorder {
-
   public enum RecorderState {
-      
     INVALID = 0,
     IDLE,
     INITIALIZING,
     RECORDING,
     CLEANING_UP
-    
   }
 
   public class RecorderBehaviour : MonoBehaviour {
-    
     private class VideoData {
-
       public byte[] pixels;
       public int width;
       public int height;
-      
+
       public readonly long timestamp;
 
       public VideoData(long timestamp) {
         this.timestamp = timestamp;
       }
-
     }
 
     private class AudioData {
-
       public readonly float[] samples;
       public readonly int channels;
       public readonly int sampleRate;
@@ -44,7 +37,6 @@ namespace UnityMediaRecorder {
         this.channels = channels;
         this.sampleRate = sampleRate;
       }
-
     }
 
     // Unity references
@@ -55,7 +47,7 @@ namespace UnityMediaRecorder {
     // for video encoding
     private ConcurrentQueue<VideoData> vQueue_;
     private Task vTask_;
-    
+
     // for audio encoding
     private int sampleRate_;
     private ConcurrentQueue<AudioData> aQueue_;
@@ -98,7 +90,7 @@ namespace UnityMediaRecorder {
         }
       }
     }
-    
+
     private void OnPostRender() {
       lock (lock_) {
         if (state_ == RecorderState.RECORDING && rec_.IsVideoEnabled && rec_.CanEncodeVideoFrame(out long timestamp)) {
@@ -123,11 +115,11 @@ namespace UnityMediaRecorder {
         }
       }
     }
-    
+
     private void OnDestroy() {
       StopRecording().HandleAsyncExceptions();
     }
-    
+
     public async Task<bool> StartRecording(RecordingOptions options) {
       lock (lock_) {
         if (state_ != RecorderState.IDLE) {
@@ -136,7 +128,7 @@ namespace UnityMediaRecorder {
 
         state_ = RecorderState.INITIALIZING;
       }
-      
+
       // no longer need lock in this method at this point
       // all other critical sections will fail with state_ == RecorderState.INITIALIZING
 
@@ -158,16 +150,16 @@ namespace UnityMediaRecorder {
       state_ = RecorderState.RECORDING;
       return true;
     }
-    
+
     public async Task<bool> StopRecording() {
       lock (lock_) {
         if (state_ != RecorderState.RECORDING) {
           return false;
         }
-        
+
         state_ = RecorderState.CLEANING_UP;
       }
-      
+
       // no longer need lock in this method at this point
       // all other critical sections will fail with state_ == RecorderState.CLEANING_UP
 
@@ -203,7 +195,7 @@ namespace UnityMediaRecorder {
         }
       });
     }
-    
+
     private Task UpdateAudio() {
       return Task.Run(() => {
         while (rec_.CanEncodeAudioFrame() && aQueue_.TryDequeue(out AudioData data)) {
@@ -211,7 +203,7 @@ namespace UnityMediaRecorder {
         }
       });
     }
-    
+
     private void ToggleAudioListeners() {
       if (mainAudioListener_ == null || recAudioListener_ == null || mainAudioListener_ == recAudioListener_) {
         return;
@@ -220,7 +212,5 @@ namespace UnityMediaRecorder {
       mainAudioListener_.enabled = !mainAudioListener_.enabled;
       recAudioListener_.enabled = !recAudioListener_.enabled;
     }
-
   }
-
 }

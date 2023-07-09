@@ -3,23 +3,20 @@ using System.Runtime.InteropServices;
 using FFmpeg.AutoGen;
 
 namespace UnityMediaRecorder.FFmpegLibraryWrappers {
-
   public static class LibavutilWrapper {
-
     private const string LIBAVUTIL_PLUGIN_NAME_ =
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
       "avutil-56.dll";
 #else
       "PLATFORM_NOT_SUPPORTED";
 #endif
-
     public const int AV_OPT_SEARCH_CHILDREN = 1 << 0;
     public const int EAGAIN = 11;
     public const int AV_CH_FRONT_CENTER = 0x00000004;
     public const int AV_CH_FRONT_LEFT = 0x00000001;
     public const int AV_CH_FRONT_RIGHT = 0x00000002;
     public const int AV_CH_BACK_LEFT = 0x00000010;
-    public const int AV_CH_BACK_RIGHT= 0x00000020;
+    public const int AV_CH_BACK_RIGHT = 0x00000020;
     public const int AV_CH_SIDE_LEFT = 0x00000200;
     public const int AV_CH_SIDE_RIGHT = 0x00000400;
     public const int AV_CH_LOW_FREQUENCY = 0x00000008;
@@ -86,7 +83,5 @@ namespace UnityMediaRecorder.FFmpegLibraryWrappers {
     [DllImport(LIBAVUTIL_PLUGIN_NAME_, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     public unsafe static extern int av_compare_ts(long ts_a, AVRational tb_a, long ts_b, AVRational tb_b);
 #pragma warning restore IDE1006
-
   }
-
 }

@@ -2,9 +2,7 @@ using System.Runtime.InteropServices;
 using FFmpeg.AutoGen;
 
 namespace UnityMediaRecorder.FFmpegLibraryWrappers {
-
   public static class LibswscaleWrapper {
-
     private const string LIBSWSCALE_PLUGIN_NAME_ =
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
       "swscale-5.dll";
@@ -22,7 +20,5 @@ namespace UnityMediaRecorder.FFmpegLibraryWrappers {
     [DllImport(LIBSWSCALE_PLUGIN_NAME_, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     public unsafe static extern void sws_freeContext(SwsContext* swsContext);
 #pragma warning restore IDE1006
-
   }
-
 }

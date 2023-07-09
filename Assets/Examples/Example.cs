@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityMediaRecorder.Utils;
 
 namespace UnityMediaRecorder.Examples {
-
   public class Example : MonoBehaviour {
-
     private RecorderBehaviour recorder_;
 
     private void Awake() {
@@ -36,7 +34,5 @@ namespace UnityMediaRecorder.Examples {
       transform.position = new Vector3(5f * sine, 0f, 0f);
       transform.rotation = Quaternion.Euler(20f * sine, 0f, 0f);
     }
-
   }
-
 }

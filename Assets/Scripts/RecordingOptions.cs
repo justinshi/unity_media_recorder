@@ -3,9 +3,7 @@ using UnityEngine;
 using UnityMediaRecorder.FFmpegLibraryWrappers;
 
 namespace UnityMediaRecorder {
-
   public class RecordingOptions {
-
     public readonly string name;
     public readonly VideoParams vParams;
     public readonly AudioParams aParams;
@@ -15,11 +13,9 @@ namespace UnityMediaRecorder {
       this.vParams = vParams;
       this.aParams = aParams;
     }
-
   }
 
   public class VideoParams {
-
     public readonly int frameRate;
     public readonly long bitRate;
     public readonly int width;
@@ -33,11 +29,9 @@ namespace UnityMediaRecorder {
       this.height = height;
       this.filterGraphDesc = filterGraphDesc;
     }
-
   }
 
   public class AudioParams {
-
     private static readonly Dictionary<AudioSpeakerMode, int> UNITY_SPEAKER_MODE_TO_FFMPEG_CHANNEL_LAYOUT_ =
       new Dictionary<AudioSpeakerMode, int> {
         { AudioSpeakerMode.Mono, LibavutilWrapper.AV_CH_LAYOUT_MONO },
@@ -60,7 +54,5 @@ namespace UnityMediaRecorder {
       this.filterGraphDesc = filterGraphDesc;
       channelLayout = UNITY_SPEAKER_MODE_TO_FFMPEG_CHANNEL_LAYOUT_[speakerMode];
     }
-
   }
-
 }

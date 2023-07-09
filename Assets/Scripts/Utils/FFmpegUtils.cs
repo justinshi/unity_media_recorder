@@ -6,15 +6,11 @@ using UnityEngine;
 using UnityMediaRecorder.FFmpegLibraryWrappers;
 
 namespace UnityMediaRecorder.Utils {
-
   public class FFmpegException : Exception {
-
-    public FFmpegException(string message) : base(message) {}
-
+    public FFmpegException(string message) : base(message) { }
   }
 
   public static class FFmpegUtils {
-
     public static void CheckRet(int ret, string errMsg) {
       if (ret < 0) {
         throw new FFmpegException($"Error code: ({ret}) - {errMsg}");
@@ -199,7 +195,5 @@ namespace UnityMediaRecorder.Utils {
       Debug.Log($"\tAudio FFmpeg filter description: {options.aParams.filterGraphDesc}");
       Debug.Log($"\tAudio FFmpeg channel alyout: {options.aParams.channelLayout}");
     }
-
   }
-
 }

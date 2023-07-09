@@ -2,9 +2,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace UnityMediaRecorder.Utils {
-
   public static class AsyncUtils {
-
     public static Task WaitUntil(Func<bool> predicate) {
       return Task.Run(async () => {
         while (!predicate()) {
@@ -20,7 +18,5 @@ namespace UnityMediaRecorder.Utils {
         throw;
       }
     }
-
   }
-
 }

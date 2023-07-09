@@ -4,15 +4,13 @@ using UnityMediaRecorder.Utils;
 using UnityMediaRecorder.FFmpegLibraryWrappers;
 
 namespace UnityMediaRecorder {
-
   public unsafe class Recording {
-
     public readonly RecordingOptions options;
 
     private readonly FFmpegMediaHandler aHandler_;
     private readonly FFmpegMediaHandler vHandler_;
     private readonly AVFormatContext* outCtx_;
-    
+
     private long? videoStartTime_;
 
     public bool IsVideoEnabled => options.vParams != null;
@@ -61,7 +59,7 @@ namespace UnityMediaRecorder {
         AVPixelFormat.AV_PIX_FMT_RGBA,
         options.vParams.width,
         options.vParams.height,
-        (AVPixelFormat)vHandler_.fr->format,
+        (AVPixelFormat) vHandler_.fr->format,
         0,
         null,
         null,
@@ -172,7 +170,7 @@ namespace UnityMediaRecorder {
         timestamp = -1;
         return false;
       }
-      
+
       long currentTime = LibavutilWrapper.av_gettime();
       if (!videoStartTime_.HasValue) {
         videoStartTime_ = currentTime;
@@ -187,7 +185,5 @@ namespace UnityMediaRecorder {
 
       return false;
     }
-
   }
-
 }
